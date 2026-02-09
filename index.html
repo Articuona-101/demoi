@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --text-gray: #3c4043;
+            --border-gray: #dadce0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+            color: var(--text-gray);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(60,64,67, 0.3), 0 4px 8px 3px rgba(60,64,67, 0.15);
+            padding: 20px;
+        }
+
+        h2 { font-weight: 500; margin-bottom: 20px; }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            padding: 10px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        input:focus, textarea:focus { border: 2px solid var(--google-blue); padding: 9px; }
+
+        button#add-btn {
+            background-color: var(--google-blue);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-gray);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .todo-content { flex-grow: 1; margin-left: 10px; }
+
+        .todo-title { font-weight: 400; display: block; }
+
+        .todo-desc { font-size: 0.85rem; color: #70757a; margin-top: 4px; }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #d93025;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .todo-item:hover .delete-btn { opacity: 1; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My Tasks</h2>
+    
+    <div class="input-group">
+        <input type="text" id="todo-input" placeholder="New task title...">
+        <textarea id="desc-input" placeholder="Details (optional)" rows="2"></textarea>
+        <button id="add-btn">Add Task</button>
+    </div>
+
+    <div id="todo-list"></div>
+</div>
+
+<script>
+    const addBtn = document.getElementById('add-btn');
+    const todoInput = document.getElementById('todo-input');
+    const descInput = document.getElementById('desc-input');
+    const todoList = document.getElementById('todo-list');
+
+    addBtn.addEventListener('click', () => {
+        const title = todoInput.value.trim();
+        const desc = descInput.value.trim();
+
+        if (title === "") return;
+
+        const todoItem = document.createElement('div');
+        todoItem.className = 'todo-item';
+
+        todoItem.innerHTML = `
+            <div class="todo-content">
+                <span class="todo-title">${title}</span>
+                ${desc ? `<div class="todo-desc">${desc}</div>` : ''}
+            </div>
+            <button class="delete-btn">Delete</button>
+        `;
+
+        todoItem.querySelector('.delete-btn').addEventListener('click', () => {
+            todoItem.remove();
+        });
+
+        todoList.prepend(todoItem);
+        
+        // Clear inputs
+        todoInput.value = "";
+        descInput.value = "";
+    });
+</script>
+
+</body>
+</html>
